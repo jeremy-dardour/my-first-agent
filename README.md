@@ -4,7 +4,7 @@ A first try at AI Agents with gradio
 
 ## Setup
 
-1. Make sure you have Python 3.7+ installed
+1. Make sure you have Python 3.12+ installed
 2. Install the required dependencies:
 
 ```bash
