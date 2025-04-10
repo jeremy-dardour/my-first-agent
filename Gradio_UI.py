@@ -128,7 +128,7 @@ def stream_to_gradio(
         ):
             yield message
 
-    print ('step_log-------------', step_log)
+     print ('step_log-------------', step_log)
     final_answer = step_log  # Last log is the run's final_answer
     final_answer = handle_agent_output_types(final_answer)
 
@@ -151,8 +151,8 @@ class GradioUI:
 
     def __init__(self, agent: MultiStepAgent):
         self.agent = agent
-        
-        
+
+
     def interact_with_agent(self, prompt, messages):
         messages.append(gr.ChatMessage(role="user", content=prompt))
         yield messages
@@ -162,7 +162,7 @@ class GradioUI:
             yield messages
         yield messages
 
-   
+
     def log_user_message(self, text_input):
         return (text_input, "")
 
