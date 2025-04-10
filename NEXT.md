@@ -5,3 +5,4 @@
 - add observability
 - add testing - few evaluations
 - deploy to hosting?
+- Add new tools and make useful

@@ -1,59 +1,33 @@
-import gradio as gr
-from smolagents import CodeAgent, tool, LiteLLMModel
+import yaml
+from smolagents import CodeAgent, HfApiModel
+from tools import FinalAnswerTool, fake_search_tool, calculator_tool
+from Gradio_UI import GradioUI
 
-# Define a simple tool that our agent can use
-@tool
-def fake_search_tool(query: str) -> str:
-    """
-    Returns dummy information about a topic.
-    Args:
-        query (str): The user query to look into:
-    """
-    # In a real application, this would connect to a search API
-    # For this demo, we'll just return a simple response
-    return f"Here's what I found about '{query}': This is simulated search result data."
 
-@tool
-def calculator_tool(expression: str) -> int:
-    """
-    Evaluate a mathematical expression.
-    Args:
-        expression (str): The user mathematical expression to calculate:
-    """
-    try:
-        result = eval(expression)
-        return f"The result of {expression} is {result}"
-    except Exception as e:
-        return f"Error evaluating expression: {str(e)}"
+model = HfApiModel(
+max_tokens=2096,
+temperature=0.5,
+model_id='Qwen/Qwen2.5-Coder-32B-Instruct',# it is possible that this model may be overloaded
+custom_role_conversions=None,
+)
+
+with open("prompts.yaml", 'r') as stream:
+    prompt_templates = yaml.safe_load(stream)
+    
 
 # Create our agent with tools
 agent = CodeAgent(
     name="MyFirstAgent",
-    model=LiteLLMModel(
-        model_id="ollama_chat/qwen2:7b"
-    ),
+    model=model,
     description="A simple agent that can answer questions and perform calculations.",
-    tools=[calculator_tool, fake_search_tool]
-)
-
-def process_query(query):
-    """Process a user query using our agent."""
-    if not query.strip():
-        return "Please enter a question or request."
-    
-    # Let the agent process the query
-    response = agent.run(query)
-    return response
-
-# Create a Gradio interface
-demo = gr.Interface(
-    fn=process_query,
-    inputs=gr.Textbox(lines=2, placeholder="Ask me anything..."),
-    outputs=gr.Textbox(lines=5),
-    title="AI Agent Demo",
-    description="A simple AI agent built with smolagents and Gradio. Try asking questions or using the calculator with expressions like '2 + 2'."
+    tools=[calculator_tool, fake_search_tool, FinalAnswerTool()],
+    max_steps=5,
+    verbosity_level=1,
+    grammar=None,
+    planning_interval=None,
+    prompt_templates=prompt_templates,
 )
 
 # Launch the app
 if __name__ == "__main__":
-    demo.launch()
+    GradioUI(agent).launch()
