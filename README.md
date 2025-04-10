@@ -10,8 +10,10 @@ A simple AI agent built with smolagents and Gradio
 ```bash
 uv sync
 ```
-4. Install Ollama
-5. Download qwen2:7b
+4. install the pre-commit: 
+```bash
+uvx pre-commit install
+```
 
 ## Running the Application
 

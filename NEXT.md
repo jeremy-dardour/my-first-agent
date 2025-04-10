@@ -1,6 +1,7 @@
 # Next changes
 
-- Prompt to make the agent work in step by step
+- ✅ Prompt to make the agent work in step by step
+- ✅ add pre-commit hook
 - check if model is enough / otherwise look for cheapest+best HF hosted / openapi
 - add observability
 - add testing - few evaluations
